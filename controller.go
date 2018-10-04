@@ -209,8 +209,7 @@ func (c *Controller) RenderBytes() ([]byte, error) {
 	if err == nil && c.Layout != "" {
 		c.Data["LayoutContent"] = template.HTML(buf.String())
 
-		if c.LayoutSections != nil {
-			for sectionName, sectionTpl := range c.LayoutSections {
+		for sectionName, sectionTpl := range c.LayoutSections {
 				if sectionTpl == "" {
 					c.Data[sectionName] = ""
 					continue
@@ -222,7 +221,6 @@ func (c *Controller) RenderBytes() ([]byte, error) {
 				}
 				c.Data[sectionName] = template.HTML(buf.String())
 			}
-		}
 
 		buf.Reset()
 		ExecuteViewPathTemplate(&buf, c.Layout, c.viewPath(), c.Data)
@@ -242,14 +240,12 @@ func (c *Controller) renderTemplate() (bytes.Buffer, error) {
 		buildFiles := []string{c.TplName}
 		if c.Layout != "" {
 			buildFiles = append(buildFiles, c.Layout)
-			if c.LayoutSections != nil {
-				for _, sectionTpl := range c.LayoutSections {
+			for _, sectionTpl := range c.LayoutSections {
 					if sectionTpl == "" {
 						continue
 					}
 					buildFiles = append(buildFiles, sectionTpl)
 				}
-			}
 		}
 		BuildTemplate(c.viewPath(), buildFiles...)
 	}
